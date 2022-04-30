@@ -58,7 +58,7 @@
 
 - [ ] "open editor"
   
-  The files needed for the following steps can be found at 
+  The files needed for the following steps can be found at [https://github.com/IVLIVS-III/majijej-toolbox/tree/main/se-widget/patreon](https://github.com/IVLIVS-III/majijej-toolbox/tree/main/se-widget/patreon)
   
   - [ ] replace "HTML" tab with the content of `widget.html`
   
