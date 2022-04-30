@@ -1,0 +1,93 @@
+{
+    "message": {
+        "type": "text",
+        "label": "Enter alert message:",
+        "value": "<FIRSTNAME> just subscribed to Patreon!"
+    },
+    "fontName": {
+        "type": "googleFont",
+        "label": "Select a font:",
+        "value": "Roboto"
+    },
+    "fontSize": {
+        "type": "number",
+        "label": "Font size",
+        "value": 48,
+        "min": 0,
+        "step": 0.5
+    },
+    "fontWeight": {
+        "label": "Font Weight",
+        "type": "dropdown",
+        "value": "400",
+        "options": {
+            "100": "Thin (100)",
+            "300": "Light (300)",
+            "400": "Regular (400)",
+            "500": "Medium (500)",
+            "700": "Bold (700)",
+            "900": "Black (900)"
+        }
+    },
+    "fontColor": {
+        "type": "colorpicker",
+        "label": "Font Color",
+        "value": "rgba(255,255,255,1)"
+    },
+    "strokeColor": {
+        "type": "colorpicker",
+        "label": "Stroke Color",
+        "value": "rgb(195,0,254)"
+    },
+    "strokeSize": {
+        "type": "number",
+        "label": "Stroke size",
+        "value": 2,
+        "min": 0,
+        "step": 0.1
+    },
+    "alertImage": {
+        "type": "image-input",
+        "label": "Select an image:"
+    },
+    "alertVideo": {
+        "type": "video-input",
+        "label": "Select a video (webm):"
+    },
+    "alertSound": {
+        "type": "sound-input",
+        "label": "Select an audio alert:"
+    },
+    "alertVolume": {
+        "type": "number",
+        "label": "Audio volume:",
+        "value": 50,
+        "min": 0,
+        "max": 100,
+        "step": 1
+    },
+    "alertDuration": {
+        "type": "number",
+        "label": "Alert duration (in sec.):",
+        "value": 10,
+        "min": 0,
+        "max": 60,
+        "step": 1
+    },
+    "debugMode": {
+        "type": "checkbox",
+        "label": "Enable debug mode (this will display the alert permanently and trigger the audio on every notification for testing):"
+    },
+    "widgetName": {
+        "type": "hidden",
+        "value": "Patreon Sub"
+    },
+    "widgetAuthor": {
+        "type": "hidden",
+        "value": "IVLIVS"
+    },
+    "widgetVersion": {
+        "type": "hidden",
+        "value": "1.0"
+    }
+}
