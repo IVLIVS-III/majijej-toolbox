@@ -1,0 +1,36 @@
+{
+    "name": "majijej-toolbox",
+    "description": "The server instance handling all majijej-toolbox needs.",
+    "website": "https://ivlivs.dev/",
+    "repository": "https://github.com/IVLIVS-III/majijej-toolbox",
+    "success_url": "/setup.html",
+    "scripts": {
+        "postdeploy": {
+            "command": "cd heroku && npm install --include=dev && npm run lint && npm run build",
+            "size": "free"
+        }
+    },
+    "env": {
+        "PATREON_WEBHOOK_SECRET": {
+            "description": "A secret exchanged with Patreon to validate alerts.",
+            "generator": "secret"
+        },
+        "SE_ACCOUNT_ID": {
+            "description": "Your StreamElements account ID.",
+            "value": ""
+        },
+        "SE_AUTH_TOKEN": {
+            "description": "Your StreamElements JWT Token.",
+            "value": ""
+        }
+    },
+    "formation": [
+        {
+            "web": {
+                "quantity": 1,
+                "size": "free"
+            }
+        }
+    ],
+    "image": "heroku/nodejs"
+}
