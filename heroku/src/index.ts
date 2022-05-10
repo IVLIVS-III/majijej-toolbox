@@ -47,7 +47,7 @@ const patreonWebhookHandler = async (request: express.Request, response: express
   const patreonPatronData: any = patreonPatronUrl ? await fetch(patreonPatronUrl, {
     method: "GET",
   }).then((res) => res.json()) : undefined;
-  const firstName: string = patreonPatronData?.["data"]?.["attributes"]?.["first_name"] ?? "";
+  const firstName: string = patreonPatronData?.["data"]?.["attributes"]?.["first_name"] ?? "Anonymous";
 
 
   // send an event to StreamElements
