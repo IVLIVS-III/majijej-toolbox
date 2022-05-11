@@ -1,4 +1,19 @@
 *.code-workspace
-**/.DS_Store
-.DS_Store
 hidden/
+
+# Node build artifacts
+node_modules
+npm-debug.log
+some-folder/lib
+heroku/lib
+
+# Local development
+*.env
+*.dev
+.DS_Store
+**/.DS_Store
+
+# Docker
+Dockerfile
+docker-compose.yml
+

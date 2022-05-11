@@ -47,7 +47,7 @@ const patreonWebhookHandler = async (request: express.Request, response: express
   const patreonPatronData: any = patreonPatronUrl ? await fetch(patreonPatronUrl, {
     method: "GET",
   }).then((res) => res.json()) : undefined;
-  const firstName: string = patreonPatronData?.["data"]?.["attributes"]?.["first_name"] ?? "Anonymous";
+  const firstName: string = patreonPatronData?.["data"]?.["attributes"]?.["first_name"] ?? "";
 
 
   // send an event to StreamElements
@@ -94,6 +94,5 @@ BODY: {key: KEYNAME, value: OBJECT}
 
 express()
     .use(express.static(path.join(__dirname, "..", "public")))
-    .get("/", (req, res) => res.redirect("/setup.html"))
     .post("/patreonWebhook", patreonWebhookHandler)
     .listen(PORT, () => console.log(`Listening on ${PORT}`));

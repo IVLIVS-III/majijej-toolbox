@@ -1,19 +1,19 @@
 {
-    "name": "majijej-toolbox",
+    "name": "majijej-toolbox-server",
     "version": "0.1.0",
     "description": "The server instance handling all majijej-toolbox needs.",
     "engines": {
         "node": "16.x"
     },
-    "main": "othername/lib/index.js",
+    "main": "heroku/lib/index.js",
     "scripts": {
-        "start": "node --experimental-modules othername/lib/index.js",
-        "build": "cd othername && npm install --include=dev && npm run lint && npm run build"
+        "start": "node --experimental-modules heroku/lib/index.js",
+        "build": "cd heroku && npm install --include=dev && npm run lint && npm run build"
     },
     "dependencies": {},
     "devDependencies": {},
     "repository": {
         "type": "git",
-        "url": "https://github.com/IVLIVS-III/majijej-toolbox"
+        "url": "https://github.com/IVLIVS-III/majijej-toolbox-server"
     }
 }

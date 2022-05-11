@@ -1275,14 +1275,13 @@
 <body>
     <article class="markdown-body">
         <h1 class="atx" id="setup-instructions">Setup instructions</h1>
-        <p>This setup should hopefully only take 5-10 minutes.</p>
         <h2 class="atx" id="overview">Overview</h2>
         <ol>
             <li>
-                <p>Deploy a server instance to Heroku</p>
+                <p>Register a webhook on Patreon</p>
             </li>
             <li>
-                <p>Register a webhook on Patreon</p>
+                <p>Transfer credentials to Firebase</p>
             </li>
             <li>
                 <p>Create a StreamElements alert</p>
@@ -1291,57 +1290,14 @@
                 <p>Integrate the StreamElements alert with streaming software (OBS / Streamlabs / …)</p>
             </li>
         </ol>
-        <h2 class="atx" id="deploy-a-server-instance-to-heroku">Deploy a server instance to Heroku</h2>
-        <ul>
-            <li class="task-list-item"><input disabled="" type="checkbox">
-                <p><a href="https://signup.heroku.com/">sign-up to Heroku</a> to create a free account</p>
-                <p>Heroku will host your server instance and is not affiliated with me.</p>
-            </li>
-            <li class="task-list-item"><input disabled="" type="checkbox">
-                <p>click <a
-                        href="https://heroku.com/deploy?template=https://github.com/IVLIVS-III/majijej-toolbox/tree/main">Deploy
-                        to Heroku</a> to create your own server instance in less than 3 minutes</p>
-                <ul>
-                    <li class="task-list-item"><input disabled="" type="checkbox">
-                        <p>leave "app-name" empty</p>
-                    </li>
-                    <li class="task-list-item"><input disabled="" type="checkbox">
-                        <p>choose your region (I suggest Europe) </p>
-                    </li>
-                    <li class="task-list-item"><input disabled="" type="checkbox">
-                        <p>fill in <code>SE_ACCOUNT_ID</code> with your StreamElements account id</p>
-                        <p>The account id will be used to determine the channel on which the alert should be played. You
-                            can find your account id <a
-                                href="https://streamelements.com/dashboard/account/channels">here</a>.</p>
-                    </li>
-                    <li class="task-list-item"><input disabled="" type="checkbox">
-                        <p>fill in <code>SE_AUTH_TOKEN</code> with your StreamElements JWT Token</p>
-                        <p>Navigate to the StreamElements <a
-                                href="https://streamelements.com/dashboard/account/channels">dashboard</a> where it can
-                            be revealed by toggeling the "Show secrets" switch.</p>
-                        <p>This token is required to send alerts to StreamElements.</p>
-                    </li>
-                    <li class="task-list-item"><input disabled="" type="checkbox">
-                        <p>click "Deploy app"</p>
-                    </li>
-                </ul>
-            </li>
-        </ul>
         <h2 class="atx" id="register-a-webhook-on-patreon">Register a webhook on Patreon</h2>
         <ul>
             <li class="task-list-item"><input disabled="" type="checkbox">
-                <p>get the app-name of the Heroku server-instance</p>
-                <p>This will be displayed on your <a href="https://heroku.com">Heroku dashboard</a> and looks something
-                    like "enigmatic-basin-23134"</p>
-            </li>
-            <li class="task-list-item"><input disabled="" type="checkbox">
-                <p>get the shared secret created by Heroku</p>
-                <ol>
-                    <li>click on your newly created app on the <a href="https://heroku.com">Heroku dashboard</a></li>
-                    <li>navigate to "Settings"</li>
-                    <li>click "Reveal Config Vars"</li>
-                    <li>copy the value associated with <code>PATREON_WEBHOOK_SECRET</code></li>
-                </ol>
+                <p>create a shared secret</p>
+                <p>This may be any sequence of characters (upper and lower case), numbers, as well as "<code>-</code>"
+                    and "<code>_</code>". I would suggest the secret to be at least 16 characteres long. It should not
+                    be longer then 64 characters.</p>
+                <p>The secret is used to validate, that patreon alerts are invoked by the official Patreon server.</p>
             </li>
             <li class="task-list-item"><input disabled="" type="checkbox">
                 <p>navigate to the <a href="https://www.patreon.com/portal/registration/register-webhooks">webhooks
@@ -1349,12 +1305,36 @@
             </li>
             <li class="task-list-item"><input disabled="" type="checkbox">
                 <p>create a new webhook for the <code>pledge:create</code> event pointing to:</p>
-                <p><code>https://&lt;heroku-app-name&gt;.herokuapp.com/patreonWebhook</code> but replace
-                    <code>&lt;heroku-app-name&gt;</code> with the app-name of your Heroku app</p>
+                <p><code>https://us-central1-majijej-toolbox.cloudfunctions.net/patreonWebhook</code></p>
                 <p>This URL will receive notifications from Patreon.</p>
             </li>
             <li class="task-list-item"><input disabled="" type="checkbox">
-                <p>register the secret (i.e. the <code>PATREON_WEBHOOK_SECRET</code>) with the newly created webhook</p>
+                <p>register the secret with the newly created webhook</p>
+            </li>
+        </ul>
+        <h2 class="atx" id="transfer-credentials-to-firebase">Transfer credentials to Firebase</h2>
+        <ul>
+            <li class="task-list-item"><input disabled="" type="checkbox">
+                <p>transfer Patreon webhook secret via:</p>
+                <p><code>firebase functions:secrets:set PATREON_WEBHOOK_SECRET</code></p>
+            </li>
+            <li class="task-list-item"><input disabled="" type="checkbox">
+                <p>transfer StreamElements account id via:</p>
+                <p><code>firebase functions:secrets:set SE_ACCOUNT_ID</code></p>
+                <p>The account id will be used to determine the channel on which the alert should be played. You can
+                    find your account id <a href="https://streamelements.com/dashboard/account/channels">here</a>.</p>
+            </li>
+            <li class="task-list-item"><input disabled="" type="checkbox">
+                <p>transfer StreamElements JWT Token via:</p>
+                <p><code>firebase functions:secrets:set SE_AUTH_TOKEN</code></p>
+                <p><strong>The auth token is the most sensitive secret used here.</strong> It is called "JWT Token" on
+                    the StreamElements <a href="https://streamelements.com/dashboard/account/channels">dashboard</a> and
+                    can be revealed by toggeling the "Show secrets" switch.</p>
+                <p>With this token the StreamElements API can be called. This enables a lot of features comparable to an
+                    editor role + chatstats and tipping.</p>
+                <p>However, this integration will only use the JWT Token to send "kv-store" updates to StreamElements.
+                    This does not change any configuration and is necessary to invoke the custom alert for a new
+                    Patreon.</p>
             </li>
         </ul>
         <h2 class="atx" id="create-a-streamelements-alert">Create a StreamElements alert</h2>
@@ -1393,7 +1373,7 @@
             </li>
             <li class="task-list-item"><input disabled="" type="checkbox">
                 <p>customize the fields on the left</p>
-                <p>Use <code>&lt;FIRSTNAME&gt;</code> anywhere in the message to be replaced by the first name of the
+                <p>Use <code>&lt;FIRTSNAME&gt;</code> anywhere in the message to be replaced by the first name of the
                     new Patreon supporter.</p>
                 <p>You can enable "debug mode" (the bottom most field) to always display the alert image/message and
                     test-trigger the alert-sound by every event via the "Emulate"-button. You can then use any event
