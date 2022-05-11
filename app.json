@@ -5,10 +5,7 @@
     "repository": "https://github.com/IVLIVS-III/majijej-toolbox",
     "success_url": "/setup.html",
     "scripts": {
-        "postdeploy": {
-            "command": "cd heroku && npm install --include=dev && npm run lint && npm run build",
-            "size": "free"
-        }
+        "postdeploy": "cd heroku && npm install --include=dev && npm run lint && npm run build"
     },
     "env": {
         "PATREON_WEBHOOK_SECRET": {
