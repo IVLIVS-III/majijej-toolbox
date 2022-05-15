@@ -1,4 +1,5 @@
 import * as express from "express";
+import * as bodyParser from "body-parser";
 import * as path from "path";
 import {createHmac} from "crypto";
 import * as https from "https";
@@ -67,6 +68,9 @@ const patreonWebhookHandler = async (request: express.Request, response: express
   // log request body
   console.log(`[${loggingId}] raw body: ${request.body}`);
 
+  // log complete request
+  console.log(request);
+
   // validate trigger header
   // we only care about new Patreon supporters
   if (request.header("X-Patreon-Event") !== "pledges:create" && request.header("X-Patreon-Event") !== "members:pledge:create") {
@@ -76,7 +80,7 @@ const patreonWebhookHandler = async (request: express.Request, response: express
   }
 
   // validate signature header
-  if (!validateSignature(request.header("X-Patreon-Event"), request.body, loggingId)) {
+  if (!validateSignature(request.header("X-Patreon-Signature"), request.body, loggingId)) {
     console.log(`[${loggingId}] signature validation failed, exiting`);
     response.sendStatus(401);
     return;
@@ -134,6 +138,7 @@ BODY: {key: KEYNAME, value: OBJECT}
 
 
 express()
+    .use(bodyParser.text({type: ["application/json", "text/*"]})) // necessary to get access to the body
     .use(express.static(path.join(__dirname, "..", "public")))
     .post("/patreonWebhook", patreonWebhookHandler)
     .listen(PORT, () => console.log(`Listening on ${PORT}`));
