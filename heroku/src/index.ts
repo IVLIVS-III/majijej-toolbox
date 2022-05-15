@@ -40,13 +40,17 @@ const validateSignature = (signature: string | undefined, body: string, loggingI
 };
 
 
-const getFirstName = async (jsonBody: any): Promise<string> => {
+const getFirstName = async (jsonBody: any, loggingId: string): Promise<string> => {
   // extract patron api url from "data" > "relationships" > "patron" > "links" > "related"
   const patreonPatronUrl: string | undefined = jsonBody["data"]?.["relationships"]?.["patron"]?.["links"]?.["related"];
   // fetch that url, extract first name from "data" > "attributes" > "first_name"
   const patreonPatronData: any = patreonPatronUrl ? await fetch(patreonPatronUrl, {
     method: "GET",
-  }).then((res) => res.json()) : undefined;
+  }).then((res) => {
+    console.log(`[${loggingId}] fetching first_name got response:`);
+    console.log(express.response);
+    return res.json();
+  }) : undefined;
   return patreonPatronData?.["data"]?.["attributes"]?.["first_name"] ?? "Anonymous";
 };
 
@@ -68,9 +72,6 @@ const patreonWebhookHandler = async (request: express.Request, response: express
   // log request body
   console.log(`[${loggingId}] raw body: ${request.body}`);
 
-  // log complete request
-  console.log(request);
-
   // validate trigger header
   // we only care about new Patreon supporters
   if (request.header("X-Patreon-Event") !== "pledges:create" && request.header("X-Patreon-Event") !== "members:pledge:create") {
@@ -90,7 +91,7 @@ const patreonWebhookHandler = async (request: express.Request, response: express
   const jsonBody = JSON.parse(request.body ?? "{}");
   console.log(`[${loggingId}] json body: ${JSON.stringify(jsonBody)}`);
 
-  const firstName: string = await getFirstName(jsonBody);
+  const firstName: string = await getFirstName(jsonBody, loggingId);
 
   console.log(`[${loggingId}] retrieved first name, ${firstName}`);
 
