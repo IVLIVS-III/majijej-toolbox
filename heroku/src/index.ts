@@ -43,6 +43,8 @@ const validateSignature = (signature: string | undefined, body: string, loggingI
 const getFirstName = async (jsonBody: any, loggingId: string): Promise<string> => {
   // extract patron api url from "data" > "relationships" > "patron" > "links" > "related"
   const patreonPatronUrl: string | undefined = jsonBody["data"]?.["relationships"]?.["patron"]?.["links"]?.["related"];
+  console.log(`[${loggingId}] fetching ${patreonPatronUrl}`);
+
   // fetch that url, extract first name from "data" > "attributes" > "first_name"
   let patreonPatronData: any = undefined;
   if (patreonPatronUrl) {
