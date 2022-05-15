@@ -89,7 +89,7 @@ const fetchHttp2 = async (url: string, loggingId: string): Promise<string> => {
 
     // Once the response is finished, log the entire data that we received
     req.on("end", () => {
-      console.log(`${loggingId}]\n${data}`);
+      // console.log(`${loggingId}]\n${data}`);
       // In this case, we don't want to make any more requests, so we can close the session
       session.close();
 
