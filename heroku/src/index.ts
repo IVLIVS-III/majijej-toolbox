@@ -1,7 +1,7 @@
 import * as express from "express";
 import * as bodyParser from "body-parser";
 import * as path from "path";
-import {createHmac} from "crypto";
+import { createHmac } from "crypto";
 import * as https from "https";
 import fetch from "node-fetch";
 import * as http2 from "http2";
@@ -61,7 +61,14 @@ const fetchHttp2 = async (url: string, loggingId: string): Promise<string> => {
     console.log(`[${loggingId}] http2 fetching path ${requestPath}`);
 
     // create the request
-    const req = session.request({":path": requestPath});
+    const req = session.request({
+      ":path": requestPath,
+      ":method": "GET",
+      "user-agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 15_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/101.0.4951.58 Mobile/15E148 Safari/604.1",
+      "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+      "accept-language": "de-DE,de;q=0.9",
+      "accept-encoding": "gzip, deflate, br",
+    });
     // send the request
     req.end();
 
@@ -182,16 +189,16 @@ BODY: {key: KEYNAME, value: OBJECT}
       "Content-Type": "application/json",
     },
   };
-  const req = https.request(options, function(res) {
+  const req = https.request(options, function (res) {
     console.log(`[${loggingId}] STATUS: ` + res.statusCode);
     console.log(`[${loggingId}] HEADERS: ` + JSON.stringify(res.headers));
     res.setEncoding("utf8");
-    res.on("data", function(chunk) {
+    res.on("data", function (chunk) {
       console.log(`[${loggingId}] BODY: ` + chunk);
     });
   });
 
-  req.on("error", function(e) {
+  req.on("error", function (e) {
     console.log(`[${loggingId}] problem with request: ` + e.message);
   });
 
@@ -203,7 +210,7 @@ BODY: {key: KEYNAME, value: OBJECT}
 
 
 express()
-    .use(bodyParser.text({type: ["application/json", "text/*"]})) // necessary to get access to the body
-    .use(express.static(path.join(__dirname, "..", "public")))
-    .post("/patreonWebhook", patreonWebhookHandler)
-    .listen(PORT, () => console.log(`Listening on ${PORT}`));
+  .use(bodyParser.text({ type: ["application/json", "text/*"] })) // necessary to get access to the body
+  .use(express.static(path.join(__dirname, "..", "public")))
+  .post("/patreonWebhook", patreonWebhookHandler)
+  .listen(PORT, () => console.log(`Listening on ${PORT}`));
