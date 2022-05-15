@@ -54,6 +54,10 @@ const getFirstName = async (jsonBody: any, loggingId: string): Promise<string> =
 
     patreonPatronData = await response.json();
   }
+
+  // logging patreonPatronData
+  console.log(`[${loggingId}] patreonPatronData: ${patreonPatronData ? JSON.stringify(patreonPatronData) : "undefined"}`);
+
   return patreonPatronData?.["data"]?.["attributes"]?.["first_name"] ?? "Anonymous";
 };
 
