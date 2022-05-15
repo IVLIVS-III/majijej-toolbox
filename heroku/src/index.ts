@@ -1,7 +1,7 @@
 import * as express from "express";
 import * as bodyParser from "body-parser";
 import * as path from "path";
-import {createHmac} from "crypto";
+import { createHmac } from "crypto";
 // import * as https from "https";
 import fetch from "node-fetch";
 // import * as http2 from "http2";
@@ -111,7 +111,7 @@ const scrapeFirstName = async (patreonPatronUid: string, loggingId: string): Pro
 
   // extracting the relevant embedded json data
   const startIdx: number = responseText.indexOf("pageUser");
-  const endToken = `https://www.patreon.com/api/user/${patreonPatronScrapeUrl}`;
+  const endToken = `https://www.patreon.com/api/user/${patreonPatronUid}`;
   const endIdx: number = responseText.indexOf(endToken);
 
   // ensure scraping worked
@@ -267,7 +267,7 @@ BODY: {key: KEYNAME, value: OBJECT}
 
 
 express()
-    .use(bodyParser.text({type: ["application/json", "text/*"]})) // necessary to get access to the body
-    .use(express.static(path.join(__dirname, "..", "public")))
-    .post("/patreonWebhook", patreonWebhookHandler)
-    .listen(PORT, () => console.log(`Listening on ${PORT}`));
+  .use(bodyParser.text({ type: ["application/json", "text/*"] })) // necessary to get access to the body
+  .use(express.static(path.join(__dirname, "..", "public")))
+  .post("/patreonWebhook", patreonWebhookHandler)
+  .listen(PORT, () => console.log(`Listening on ${PORT}`));
