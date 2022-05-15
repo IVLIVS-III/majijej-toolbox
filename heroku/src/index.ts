@@ -1,10 +1,9 @@
 import * as express from "express";
 import * as bodyParser from "body-parser";
 import * as path from "path";
-import { createHmac } from "crypto";
+import {createHmac} from "crypto";
 // import * as https from "https";
 import fetch from "node-fetch";
-// import * as http2 from "http2";
 
 const PORT = process.env.PORT || 5000;
 
@@ -41,68 +40,7 @@ const validateSignature = (signature: string | undefined, body: string, loggingI
 };
 
 
-// const fetchHttp2 = async (url: string, loggingId: string): Promise<string> => {
-//   // create a promise so this function can be called with async/await
-//   return new Promise<string>((resolve, reject) => {
-//     // parse the url
-//     const parsedUrl = new URL(url);
-
-//     // open a http2 connection
-//     const session = http2.connect(`https://${parsedUrl.hostname}`);
-
-//     // If there is any error in connecting, log it to the console
-//     session.on("error", (err) => {
-//       console.log(err);
-//       reject(err);
-//     });
-
-//     const requestPath: string = parsedUrl.pathname + parsedUrl.search;
-
-//     console.log(`[${loggingId}] http2 fetching path ${requestPath}`);
-
-//     // create the request
-//     const req = session.request({
-//       ":path": requestPath,
-//       ":method": "GET",
-//       "user-agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 15_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/101.0.4951.58 Mobile/15E148 Safari/604.1",
-//       "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-//       "accept-language": "de-DE,de;q=0.9",
-//       "accept-encoding": "gzip, deflate, br",
-//     });
-//     // send the request
-//     req.end();
-
-//     // This callback is fired once we receive a response from the server
-//     req.on("response", (headers) => {
-//       // we can log each response header here
-//       console.log(`[${loggingId}] http2 response headers: ${JSON.stringify(headers)}`);
-//     });
-
-//     // To fetch the response body, we set the encoding we want and initialize an empty data string
-//     req.setEncoding("utf8");
-//     let data = "";
-
-//     // append response data to the data string every time we receive new data chunks in the response
-//     req.on("data", (chunk) => {
-//       data += chunk;
-//     });
-
-//     // Once the response is finished, log the entire data that we received
-//     req.on("end", () => {
-//       // console.log(`${loggingId}]\n${data}`);
-//       // In this case, we don't want to make any more requests, so we can close the session
-//       session.close();
-
-//       // resolve the promise
-//       resolve(data);
-//     });
-//   });
-// };
-
-
-const scrapeFirstName = async (patreonPatronUid: string, loggingId: string): Promise<string> => {
-  const fallbackName = "Anonymous";
-
+const scrapeFirstName = async (patreonPatronUid: string, fallbackName: string, loggingId: string): Promise<string> => {
   const patreonPatronScrapeUrl = `https://www.patreon.com/user?u=${patreonPatronUid}`;
   console.log(`[${loggingId}] fetching ${patreonPatronScrapeUrl} to scrape`);
 
@@ -154,30 +92,17 @@ const getFirstName = async (jsonBody: any, loggingId: string): Promise<string> =
   const patreonPatronUid: string | undefined = jsonBody["data"]?.["relationships"]?.["patron"]?.["data"]?.["id"];
   console.log(`[${loggingId}] patron uid ${patreonPatronUid}`);
 
+  const fallbackName = "Anonymous";
+
   if (patreonPatronUid) {
     // fetch via scraping
-    const scrapeResult: string = await scrapeFirstName(patreonPatronUid, loggingId);
+    const scrapeResult: string = await scrapeFirstName(patreonPatronUid, fallbackName, loggingId);
     console.log(`[${loggingId}] scraping firstName returned: ${scrapeResult}`);
+
+    return scrapeResult;
   }
 
-  // fetch that url, extract first name from "data" > "attributes" > "first_name"
-  let patreonPatronData: any = undefined;
-  if (patreonPatronUrl) {
-    // fetch via http2
-    // const http2Result = await fetchHttp2(patreonPatronUrl, loggingId);
-    // console.log(`[${loggingId}] got http2 fetch result: ${http2Result}`);
-
-    const response = await fetch(patreonPatronUrl);
-    const responseText: string = await response.text();
-    console.log(`[${loggingId}] fetching first_name got response body: ${responseText}`);
-
-    patreonPatronData = await response.json();
-  }
-
-  // logging patreonPatronData
-  console.log(`[${loggingId}] patreonPatronData: ${patreonPatronData ? JSON.stringify(patreonPatronData) : "undefined"}`);
-
-  return patreonPatronData?.["data"]?.["attributes"]?.["first_name"] ?? "Anonymous";
+  return fallbackName;
 };
 
 
@@ -267,7 +192,7 @@ BODY: {key: KEYNAME, value: OBJECT}
 
 
 express()
-  .use(bodyParser.text({ type: ["application/json", "text/*"] })) // necessary to get access to the body
-  .use(express.static(path.join(__dirname, "..", "public")))
-  .post("/patreonWebhook", patreonWebhookHandler)
-  .listen(PORT, () => console.log(`Listening on ${PORT}`));
+    .use(bodyParser.text({type: ["application/json", "text/*"]})) // necessary to get access to the body
+    .use(express.static(path.join(__dirname, "..", "public")))
+    .post("/patreonWebhook", patreonWebhookHandler)
+    .listen(PORT, () => console.log(`Listening on ${PORT}`));
