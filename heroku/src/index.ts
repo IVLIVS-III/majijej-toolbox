@@ -46,10 +46,10 @@ const getFirstName = async (jsonBody: any, loggingId: string): Promise<string> =
   // fetch that url, extract first name from "data" > "attributes" > "first_name"
   const patreonPatronData: any = patreonPatronUrl ? await fetch(patreonPatronUrl, {
     method: "GET",
-  }).then((res) => {
+  }).then(async (res) => {
     console.log(`[${loggingId}] fetching first_name got response:`);
     console.log(express.response);
-    return res.json();
+    return await res.json();
   }) : undefined;
   return patreonPatronData?.["data"]?.["attributes"]?.["first_name"] ?? "Anonymous";
 };
