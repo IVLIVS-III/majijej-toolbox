@@ -2,7 +2,7 @@ import * as express from "express";
 import * as bodyParser from "body-parser";
 import * as path from "path";
 import {createHmac} from "crypto";
-// import * as https from "https";
+import * as https from "https";
 import fetch from "node-fetch";
 
 const PORT = process.env.PORT || 5000;
@@ -153,39 +153,37 @@ PUT: https://kvstore.streamelements.com/v2/channel/ACCOUNTID/
 HEADER: authorization: Bearer TOKEN
 BODY: {key: KEYNAME, value: OBJECT}
 */
-  /*
-    const body = {
-      key: "customWidget.patreon.sub",
-      value: {
-        "timestamp": Date.now(),
-        "firstName": firstName,
-      },
-    };
-    const options = {
-      host: "kvstore.streamelements.com",
-      path: `/v2/channel/${process.env.SE_ACCOUNT_ID}`,
-      method: "PUT",
-      headers: {
-        "authorization": `Bearer ${process.env.SE_AUTH_TOKEN}`,
-        "Content-Type": "application/json",
-      },
-    };
-    const req = https.request(options, function (res) {
-      console.log(`[${loggingId}] STATUS: ` + res.statusCode);
-      console.log(`[${loggingId}] HEADERS: ` + JSON.stringify(res.headers));
-      res.setEncoding("utf8");
-      res.on("data", function (chunk) {
-        console.log(`[${loggingId}] BODY: ` + chunk);
-      });
+  const body = {
+    key: "customWidget.patreon.sub",
+    value: {
+      "timestamp": Date.now(),
+      "firstName": firstName,
+    },
+  };
+  const options = {
+    host: "kvstore.streamelements.com",
+    path: `/v2/channel/${process.env.SE_ACCOUNT_ID}`,
+    method: "PUT",
+    headers: {
+      "authorization": `Bearer ${process.env.SE_AUTH_TOKEN}`,
+      "Content-Type": "application/json",
+    },
+  };
+  const req = https.request(options, function(res) {
+    console.log(`[${loggingId}] STATUS: ` + res.statusCode);
+    console.log(`[${loggingId}] HEADERS: ` + JSON.stringify(res.headers));
+    res.setEncoding("utf8");
+    res.on("data", function(chunk) {
+      console.log(`[${loggingId}] BODY: ` + chunk);
     });
+  });
 
-    req.on("error", function (e) {
-      console.log(`[${loggingId}] problem with request: ` + e.message);
-    });
+  req.on("error", function(e) {
+    console.log(`[${loggingId}] problem with request: ` + e.message);
+  });
 
-    req.write(JSON.stringify(body));
-    req.end();
-    */
+  req.write(JSON.stringify(body));
+  req.end();
 
   response.sendStatus(200);
 };
