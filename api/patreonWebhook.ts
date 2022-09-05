@@ -103,6 +103,13 @@ const getFirstName = async (jsonBody: any, loggingId: string): Promise<string> =
 
 
 export default async (request: VercelRequest, response: VercelResponse) => {
+    // a GET-request indicates someone accessing the webhook url directly. Send them to Twitch.
+    if (request.method === "GET") {
+        const location = `https://${request.headers.host ?? "majijej-toolbox.vercel.app"}/`;
+        response.status(302).setHeader("Location", location).send(`Redirecting to <a href="${location}">${location}</a>`);
+        return;
+    }
+
     // we expect a Patreon webhook to always be a POST-request
     if (request.method !== "POST") {
         response.setHeader("Allow", "POST").status(405).send("Method Not Allowed");
