@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Majijej Toolbox</title>
+    <meta http-equiv="refresh" content="3; URL=https://www.twitch.tv/majijej">
+
+    <style>
+        @media (prefers-color-scheme: dark) {
+            body {
+                background-color: black;
+                color: white;
+            }
+        }
+
+        :root {
+            --loader-animation-duration: 4.5s;
+
+            --primary-color: #a152d3;
+            --primary-color-light: #aa63d7;
+            --primary-color-dark: #914abe;
+        }
+
+        #loader {
+            width: 42px;
+            height: 42px;
+            box-sizing: border-box;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        #loader-primary {
+            width: 20px;
+            height: 20px;
+            box-sizing: border-box;
+            background-color: var(--primary-color);
+            position: absolute;
+            left: 0;
+            top: 0;
+            animation: loader-animation var(--loader-animation-duration) linear 0.375s infinite;
+        }
+
+        #loader-dark {
+            width: 20px;
+            height: 20px;
+            box-sizing: border-box;
+            background-color: var(--primary-color-dark);
+            position: absolute;
+            right: 0;
+            top: 0;
+            animation: loader-animation-dark var(--loader-animation-duration) linear infinite;
+        }
+
+        #loader-light {
+            width: 20px;
+            height: 20px;
+            box-sizing: border-box;
+            background-color: var(--primary-color-light);
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            animation: loader-animation-light var(--loader-animation-duration) linear 0.75s infinite;
+        }
+
+        @keyframes loader-animation {
+            0% {
+                transform: translate(0px, 0px) rotateX(0deg) rotateY(0deg);
+            }
+
+            8.333% {
+                transform: translate(22px, 0px) rotateX(0deg) rotateY(180deg);
+            }
+
+            25% {
+                transform: translate(22px, 0px) rotateX(0deg) rotateY(180deg);
+            }
+
+            33.333% {
+                transform: translate(22px, 22px) rotateX(-180deg) rotateY(180deg);
+            }
+
+            50% {
+                transform: translate(22px, 22px) rotateX(-180deg) rotateY(180deg);
+            }
+
+            58.333% {
+                transform: translate(0px, 22px) rotateX(-180deg) rotateY(0deg);
+            }
+
+            75% {
+                transform: translate(0px, 22px) rotateX(-180deg) rotateY(0deg);
+            }
+
+            83.333% {
+                transform: translate(0px, 0px) rotateX(0deg) rotateY(0deg);
+            }
+
+            100% {
+                transform: translate(0px, 0px) rotateX(0deg) rotateY(0deg);
+            }
+        }
+
+        @keyframes loader-animation-dark {
+            0% {
+                transform: translate(0px, 0px) rotateX(0deg) rotateY(0deg);
+            }
+
+            8.333% {
+                transform: translate(0px, 22px) rotateX(-180deg) rotateY(0deg);
+            }
+
+            25% {
+                transform: translate(0px, 22px) rotateX(-180deg) rotateY(0deg);
+            }
+
+            33.333% {
+                transform: translate(-22px, 22px) rotateX(-180deg) rotateY(-180deg);
+            }
+
+            50% {
+                transform: translate(-22px, 22px) rotateX(-180deg) rotateY(-180deg);
+            }
+
+            58.333% {
+                transform: translate(-22px, 0px) rotateX(0deg) rotateY(-180deg);
+            }
+
+            75% {
+                transform: translate(-22px, 0px) rotateX(0deg) rotateY(-180deg);
+            }
+
+            83.333% {
+                transform: translate(0px, 0px) rotateX(0deg) rotateY(0deg);
+            }
+
+            100% {
+                transform: translate(0px, 0px) rotateX(0deg) rotateY(0deg);
+            }
+        }
+
+        @keyframes loader-animation-light {
+            0% {
+                transform: translate(0px, 0px) rotateX(0deg) rotateY(0deg);
+            }
+
+            8.333% {
+                transform: translate(0px, -22px) rotateX(180deg) rotateY(0deg);
+            }
+
+            25% {
+                transform: translate(0px, -22px) rotateX(180deg) rotateY(0deg);
+            }
+
+            33.333% {
+                transform: translate(22px, -22px) rotateX(180deg) rotateY(180deg);
+            }
+
+            50% {
+                transform: translate(22px, -22px) rotateX(180deg) rotateY(180deg);
+            }
+
+            58.333% {
+                transform: translate(22px, 0px) rotateX(0deg) rotateY(180deg);
+            }
+
+            75% {
+                transform: translate(22px, 0px) rotateX(0deg) rotateY(180deg);
+            }
+
+            83.333% {
+                transform: translate(0px, 0px) rotateX(0deg) rotateY(0deg);
+            }
+
+            100% {
+                transform: translate(0px, 0px) rotateX(0deg) rotateY(0deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="loader">
+        <div id="loader-light"></div>
+        <div id="loader-primary"></div>
+        <div id="loader-dark"></div>
+    </div>
+</body>
+
+</html>

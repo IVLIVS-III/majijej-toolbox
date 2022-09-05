@@ -17,3 +17,5 @@ heroku/lib
 Dockerfile
 docker-compose.yml
 
+# Vercel
+.vercel
