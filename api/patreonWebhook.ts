@@ -124,7 +124,7 @@ export default async (request: VercelRequest, response: VercelResponse) => {
     console.log(`[${loggingId}] got header: ${request.headers["x-patreon-event"]}`);
 
     // log request body
-    console.log(`[${loggingId}] raw body: ${request.body}`);
+    console.log(`[${loggingId}] raw body: ${JSON.stringify(request.body)}`);
 
     // validate trigger header
     // we only care about new Patreon supporters
@@ -135,7 +135,13 @@ export default async (request: VercelRequest, response: VercelResponse) => {
     }
 
     // validate signature header
-    if (!validateSignature(request.headers["x-patreon-signature"], request.body, loggingId)) {
+    let validateSignatureResult: boolean = false;
+    try {
+        validateSignatureResult = validateSignature(request.headers["x-patreon-signature"], request.body, loggingId)
+    } catch (e: unknown) {
+        console.log(`[${loggingId}] signature validation error, ${e}`);
+    }
+    if (!validateSignatureResult) {
         console.log(`[${loggingId}] signature validation failed, exiting`);
         response.status(401).send("Unauthorized");
         return;
