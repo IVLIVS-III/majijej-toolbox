@@ -80,19 +80,19 @@ const scrapeFirstName = async (patreonPatronUid: string, fallbackName: string, l
 
 
 const getFirstName = async (jsonBody: any, loggingId: string): Promise<string> => {
-    // extract patron api url from "data" > "relationships" > "patron" > "links" > "related"
-    const patreonPatronUrl: string | undefined = jsonBody["data"]?.["relationships"]?.["patron"]?.["links"]?.["related"];
-    console.log(`[${loggingId}] fetching ${patreonPatronUrl}`);
+    // extract patron api url from "data" > "relationships" > "user" > "links" > "related"
+    const patreonUserUrl: string | undefined = jsonBody["data"]?.["relationships"]?.["user"]?.["links"]?.["related"];
+    console.log(`[${loggingId}] fetching ${patreonUserUrl}`);
 
-    // extract patron uid from "data" > "relationships" > "patron" > "data" > "id"
-    const patreonPatronUid: string | undefined = jsonBody["data"]?.["relationships"]?.["patron"]?.["data"]?.["id"];
-    console.log(`[${loggingId}] patron uid ${patreonPatronUid}`);
+    // extract patron uid from "data" > "relationships" > "user" > "data" > "id"
+    const patreonUserUid: string | undefined = jsonBody["data"]?.["relationships"]?.["user"]?.["data"]?.["id"];
+    console.log(`[${loggingId}] user uid ${patreonUserUid}`);
 
     const fallbackName = "Anonymous";
 
-    if (patreonPatronUid) {
+    if (patreonUserUid) {
         // fetch via scraping
-        const scrapeResult: string = await scrapeFirstName(patreonPatronUid, fallbackName, loggingId);
+        const scrapeResult: string = await scrapeFirstName(patreonUserUid, fallbackName, loggingId);
         console.log(`[${loggingId}] scraping firstName returned: ${scrapeResult}`);
 
         return scrapeResult;
