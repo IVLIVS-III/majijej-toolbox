@@ -80,11 +80,11 @@ const scrapeFirstName = async (patreonPatronUid: string, fallbackName: string, l
 
 
 const getFirstName = async (jsonBody: any, loggingId: string): Promise<string> => {
-    // extract patron api url from "data" > "relationships" > "user" > "links" > "related"
+    // extract user api url from "data" > "relationships" > "user" > "links" > "related"
     const patreonUserUrl: string | undefined = jsonBody["data"]?.["relationships"]?.["user"]?.["links"]?.["related"];
     console.log(`[${loggingId}] fetching ${patreonUserUrl}`);
 
-    // extract patron uid from "data" > "relationships" > "user" > "data" > "id"
+    // extract user uid from "data" > "relationships" > "user" > "data" > "id"
     const patreonUserUid: string | undefined = jsonBody["data"]?.["relationships"]?.["user"]?.["data"]?.["id"];
     console.log(`[${loggingId}] user uid ${patreonUserUid}`);
 
