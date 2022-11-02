@@ -151,7 +151,7 @@ export default async (request: VercelRequest, response: VercelResponse) => {
     }
 
     // extract raw body
-    const buf = await buffer(request.body);
+    const buf = await buffer(request);
     const rawBody = buf.toString('utf8');
 
     // validate signature header
