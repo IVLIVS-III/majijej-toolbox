@@ -2,6 +2,22 @@ import { createHmac } from "crypto";
 import * as https from "https";
 import fetch from "node-fetch";
 import type { VercelRequest, VercelResponse } from '@vercel/node';
+import type { Readable } from 'node:stream';
+
+export const config = {
+    api: {
+        bodyParser: false,
+    },
+};
+
+
+async function buffer(readable: Readable) {
+    const chunks = [];
+    for await (const chunk of readable) {
+        chunks.push(typeof chunk === 'string' ? Buffer.from(chunk) : chunk);
+    }
+    return Buffer.concat(chunks);
+}
 
 
 const validateSignature = (signature: string | string[] | undefined, body: string, loggingId: string): boolean => {
@@ -134,10 +150,14 @@ export default async (request: VercelRequest, response: VercelResponse) => {
         return;
     }
 
+    // extract raw body
+    const buf = await buffer(request.body);
+    const rawBody = buf.toString('utf8');
+
     // validate signature header
     let validateSignatureResult: boolean = false;
     try {
-        validateSignatureResult = validateSignature(request.headers["x-patreon-signature"], request.body, loggingId)
+        validateSignatureResult = validateSignature(request.headers["x-patreon-signature"], rawBody, loggingId)
     } catch (e: unknown) {
         console.log(`[${loggingId}] signature validation error, ${e}`);
     }
@@ -148,7 +168,7 @@ export default async (request: VercelRequest, response: VercelResponse) => {
     }
 
     // digest the message body
-    const jsonBody = JSON.parse(request.body ?? "{}");
+    const jsonBody = JSON.parse(rawBody ?? "{}");
     console.log(`[${loggingId}] json body: ${JSON.stringify(jsonBody)}`);
 
     const firstName: string = await getFirstName(jsonBody, loggingId);
